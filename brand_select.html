@@ -164,32 +164,35 @@
         <!-- Drawer Overlay -->
         <div id="drawer-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999;" onclick="closeDrawer()"></div>
         
-        <!-- Drawer Content -->
-        <div id="model-drawer" style="position: fixed; top: 0; right: -100%; width: 85%; max-width: 400px; height: 100%; background: #fff; z-index: 10000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -4px 0 16px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
-            <div style="padding: 16px 20px; font-weight: bold; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; padding-top: calc(16px + env(safe-area-inset-top));">
-                <span id="drawer-brand-title">选择车系与车型</span>
-                <span onclick="closeDrawer()" style="font-size: 24px; color: #999; cursor: pointer; padding: 0 8px;">×</span>
-            </div>
-            <div style="flex: 1; overflow-y: auto;">
-                <div class="series-group">
-                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">天籁 ALTIMA</div>
-                    <div style="padding: 0 20px;">
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0L XL-TLS悦享版')">2022款 2.0L XL-TLS 悦享版</div>
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0T XV 尊享版')">2022款 2.0T XV 尊享版</div>
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2021款 2.0L XE 纯真版')">2021款 2.0L XE 纯真版</div>
-                    </div>
+        <!-- Drawer Container matching app-container width -->
+        <div id="drawer-container" style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 100%; pointer-events: none; z-index: 10000; overflow: hidden;">
+            <!-- Drawer Content -->
+            <div id="model-drawer" style="position: absolute; top: 0; right: -100%; width: 85%; height: 100%; background: #fff; pointer-events: auto; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -4px 0 16px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+                <div style="padding: 16px 20px; font-weight: bold; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; padding-top: calc(16px + env(safe-area-inset-top));">
+                    <span id="drawer-brand-title">选择车系与车型</span>
+                    <span onclick="closeDrawer()" style="font-size: 24px; color: #999; cursor: pointer; padding: 0 8px;">×</span>
                 </div>
-                <div class="series-group">
-                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">轩逸 SYLPHY</div>
-                    <div style="padding: 0 20px;">
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2023款 1.6L 悦享版')">2023款 1.6L 悦享版</div>
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2022款 e-POWER 超智联PLUS')">2022款 e-POWER 超智联PLUS</div>
+                <div style="flex: 1; overflow-y: auto;">
+                    <div class="series-group">
+                        <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">天籁 ALTIMA</div>
+                        <div style="padding: 0 20px;">
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0L XL-TLS悦享版')">2022款 2.0L XL-TLS 悦享版</div>
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0T XV 尊享版')">2022款 2.0T XV 尊享版</div>
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2021款 2.0L XE 纯真版')">2021款 2.0L XE 纯真版</div>
+                        </div>
                     </div>
-                </div>
-                <div class="series-group">
-                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">逍客 QASHQAI</div>
-                    <div style="padding: 0 20px;">
-                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '逍客 2023款 2.0L 豪华版')">2023款 2.0L 豪华版</div>
+                    <div class="series-group">
+                        <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">轩逸 SYLPHY</div>
+                        <div style="padding: 0 20px;">
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2023款 1.6L 悦享版')">2023款 1.6L 悦享版</div>
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2022款 e-POWER 超智联PLUS')">2022款 e-POWER 超智联PLUS</div>
+                        </div>
+                    </div>
+                    <div class="series-group">
+                        <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">逍客 QASHQAI</div>
+                        <div style="padding: 0 20px;">
+                            <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '逍客 2023款 2.0L 豪华版')">2023款 2.0L 豪华版</div>
+                        </div>
                     </div>
                 </div>
             </div>
