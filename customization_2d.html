@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2D定制 - 乐改</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-divider);
+        }
+        .header h1 { margin: 0; font-size: 16px; text-align: center; flex: 1; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #111; width: 24px; cursor: pointer; }
+        .save-btn { font-size: 14px; color: #111; font-weight: 500; cursor: pointer; }
+
+        /* 2D Car Viewer */
+        .car-viewer {
+            width: 100%;
+            height: 300px;
+            background: #e5e5e5;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .car-image {
+            width: 90%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+        }
+        /* A blend layer to simulate color change over a grayscale car image */
+        .color-blend {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: transparent;
+            mix-blend-mode: multiply;
+            z-index: 3;
+            pointer-events: none;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Configurator Panel */
+        .config-panel {
+            background: var(--color-bg);
+            border-radius: 16px 16px 0 0;
+            margin-top: -16px;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            min-height: calc(100vh - 300px);
+        }
+        
+        .config-tabs {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-divider);
+        }
+        .c-tab {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            padding-bottom: 12px;
+            position: relative;
+        }
+        .c-tab.active {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+        .c-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 3px; background: #111;
+        }
+
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .swatch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .swatch-color {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .swatch-item.active .swatch-color {
+            border-color: #111;
+        }
+        .swatch-name {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Action bar */
+        .action-bar {
+            position: fixed;
+            bottom: 54px; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px;
+            background: var(--color-bg);
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid var(--color-divider);
+            z-index: 20;
+        }
+        .btn-half { flex: 1; }
+    </style>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="app-container" style="padding-bottom: 120px;">
+
+        <!-- 小程序系统头 -->
+        <div style="position: relative; top: 0; z-index: 9999; background: #fff; padding-bottom: 4px;">
+            <!-- 状态栏 -->
+            <div style="height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px; font-weight: 500; font-family: -apple-system, sans-serif;">
+                <span>09:41</span>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 9.5L1 11M5 6.5L5 11M9 3.5L9 11M13 0.5L13 11" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 1L1 8H15L8 1Z" fill="#111"/></svg>
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="3" stroke="#111" stroke-width="1.5"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#111"/><path d="M21 4V8" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+            <!-- 胶囊导航栏 -->
+            <div style="height: 44px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; left: 16px; font-size: 24px; cursor: pointer; color: #111; line-height: 44px;" onclick="history.back()">‹</div>
+                <div style="font-size: 16px; font-weight: 600;">乐改</div>
+                <div style="position: absolute; right: 12px; width: 80px; height: 32px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-evenly; backdrop-filter: blur(10px);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                    <div style="width: 1px; height: 16px; background: rgba(0,0,0,0.1);"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="car-viewer" style="background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; position:relative; height: 320px;">
+            <!-- 使用真实的跑车图片作为底图，通过 CSS 滤镜实现极度逼真的换色（保留全部高光和反射） -->
+            <img id="real-car-img" src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=800&q=80" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition: filter 0.5s ease-in-out;">
+            
+            <div style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; padding:4px 8px; border-radius:4px; z-index:10; backdrop-filter:blur(4px);">
+                💡 原型演示：使用真实照片+Hue滤镜模拟漆面渲染
+            </div>
+        </div>
+
+        <!-- 车型上下文栏 (原型标准) -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #fff; border-bottom: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                <span style="font-size: 14px; font-weight: bold; color: #111; white-space: nowrap;">日产 · 天籁</span>
+                <span style="font-size: 12px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">2022款 2.0T XL-TLS 悦享版</span>
+            </div>
+            <div style="font-size: 14px; color: #1890ff; cursor: pointer; white-space: nowrap; margin-left: 16px;" onclick="location.href='brand_select.html'">切换</div>
+        </div>
+
+        <div class="config-panel">
+            <div class="config-tabs">
+                <div class="c-tab active" onclick="switchTab(this, 'color-grid')">改色膜</div>
+                <div class="c-tab" onclick="switchTab(this, 'ppf-grid')">隐形车衣</div>
+                <div class="c-tab" onclick="switchTab(this, 'wheel-grid')">轮毂</div>
+                <div class="c-tab" onclick="switchTab(this, 'interior-grid')">内饰</div>
+            </div>
+
+            <!-- 改色膜选项 -->
+            <div id="color-grid" class="swatch-grid" style="display: grid;">
+                <div class="swatch-item active" onclick="changeColor('grayscale(0) hue-rotate(0deg)', 'color', '原车漆', 0, this)">
+                    <div class="swatch-color" style="background: #ffffff; border: 1px solid #ccc;"></div>
+                    <div class="swatch-name">原车漆</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('grayscale(0) hue-rotate(120deg)', 'color', '丛林绿改色膜', 3500, this)">
+                    <div class="swatch-color" style="background: #2b8a3e;"></div>
+                    <div class="swatch-name">丛林绿</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('grayscale(0) hue-rotate(220deg)', 'color', '深海蓝改色膜', 3500, this)">
+                    <div class="swatch-color" style="background: #1864ab;"></div>
+                    <div class="swatch-name">深海蓝</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('grayscale(100%) brightness(40%)', 'color', '黑武士改色膜', 4000, this)">
+                    <div class="swatch-color" style="background: #212529;"></div>
+                    <div class="swatch-name">黑武士</div>
+                </div>
+            </div>
+            
+            <!-- 隐形车衣选项 -->
+            <div id="ppf-grid" class="swatch-grid" style="display: none;">
+                <div class="swatch-item" onclick="changeColor('grayscale(0) brightness(110%) contrast(110%)', 'ppf', '亮面TPU隐形车衣', 6000, this)">
+                    <div class="swatch-color" style="background: #f8f9fa; border: 1px solid #eee;"></div>
+                    <div class="swatch-name">亮面TPU</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('grayscale(0) brightness(95%) contrast(90%)', 'ppf', '哑光TPU隐形车衣', 8000, this)">
+                    <div class="swatch-color" style="background: #e9ecef;"></div>
+                    <div class="swatch-name">哑光TPU</div>
+                </div>
+            </div>
+            
+            <!-- 轮毂选项 -->
+            <div id="wheel-grid" class="swatch-grid" style="display: none;">
+                <div class="swatch-item" onclick="changeColor('', 'wheel', '原厂轮毂', 0, this)">
+                    <div class="swatch-color" style="background: #ced4da;"></div>
+                    <div class="swatch-name">原厂轮毂</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('', 'wheel', '锻造多幅轮毂', 2000, this)">
+                    <div class="swatch-color" style="background: #495057;"></div>
+                    <div class="swatch-name">锻造多幅</div>
+                </div>
+            </div>
+
+            <!-- 内饰选项 -->
+            <div id="interior-grid" class="swatch-grid" style="display: none;">
+                <div class="swatch-item" onclick="changeColor('', 'interior', '全黑内饰', 0, this)">
+                    <div class="swatch-color" style="background: #212529;"></div>
+                    <div class="swatch-name">全黑内饰</div>
+                </div>
+                <div class="swatch-item" onclick="changeColor('', 'interior', '红黑运动内饰', 1500, this)">
+                    <div class="swatch-color" style="background: #c92a2a;"></div>
+                    <div class="swatch-name">红黑运动</div>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--color-divider);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 14px; font-weight: bold;">当前配置预估</span>
+                    <span style="font-size: 18px; font-weight: bold;" id="total-price">¥3,500 <span style="font-size: 12px; color: #999;">起</span></span>
+                </div>
+                <div id="scheme-items-list">
+                    <div style="font-size: 12px; color: #999;">暂未选择任何定制项目</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar" style="display: flex; gap: 12px;">
+            <button class="btn btn-outline" style="flex: 1;" onclick="showSaveModal()">保存方案</button>
+            <button class="btn btn-primary" style="flex: 1;" onclick="location.href='checkout.html'">去下单</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = {
+            'color': null,
+            'ppf': null,
+            'wheel': null,
+            'interior': null
+        };
+
+        function updateCartUI() {
+            let total = 0;
+            let html = '';
+            for (let key in cart) {
+                if (cart[key]) {
+                    html += `<div style="font-size: 12px; color: #666; margin-top: 4px;">+ ${cart[key].name} (¥${cart[key].price})</div>`;
+                    total += cart[key].price;
+                }
+            }
+            if (html === '') {
+                html = '<div style="font-size: 12px; color: #999;">暂未选择任何定制项目</div>';
+            }
+            document.getElementById('scheme-items-list').innerHTML = html;
+            document.getElementById('total-price').innerHTML = `¥${total.toLocaleString()} <span style="font-size: 12px; color: #999;">起</span>`;
+        }
+
+        function changeColor(filterString, category, colorName, price, el) {
+            // 逼真演示：使用 CSS Hue 滤镜改变真实照片的颜色，保留完美的高光和质感
+            if (filterString) {
+                document.getElementById('real-car-img').style.filter = filterString;
+            }
+            
+            // 更新购物车
+            if (price === 0) {
+                cart[category] = null;
+            } else {
+                cart[category] = { name: colorName, price: price };
+            }
+            updateCartUI();
+            
+            // 更新 UI 激活状态
+            let grid = el.parentElement;
+            grid.querySelectorAll('.swatch-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCartUI);
+
+        function switchTab(el, targetGridId) {
+            // 更新 Tab 激活状态
+            document.querySelectorAll('.c-tab').forEach(tab => tab.classList.remove('active'));
+            el.classList.add('active');
+
+            // 显示对应的配置网格
+            document.querySelectorAll('.swatch-grid').forEach(grid => grid.style.display = 'none');
+            document.getElementById(targetGridId).style.display = 'grid';
+        }
+
+        function showSaveModal() {
+            document.getElementById('save-modal').style.display = 'flex';
+        }
+        
+        function hideSaveModal() {
+            document.getElementById('save-modal').style.display = 'none';
+        }
+    </script>
+    
+    <!-- Custom Modal for Save Scheme -->
+    <div id="save-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: #fff; width: 300px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15); animation: popIn 0.3s ease-out;">
+            <div style="padding: 24px 20px 20px; text-align: center;">
+                <div style="width: 48px; height: 48px; border-radius: 24px; background: #e3fcef; color: #0ca678; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #111; margin-bottom: 8px;">方案保存成功</div>
+                <div style="font-size: 14px; color: #666; line-height: 1.5;">您的配置已保存至「我的改装」。发布到社区可以获得更多车友点赞和交流哦！</div>
+            </div>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <div style="flex: 1; padding: 14px; text-align: center; font-size: 16px; color: #666; cursor: pointer; border-right: 1px solid #eee;" onclick="hideSaveModal()">暂不发布</div>
+                <div style="flex: 1; padding: 14px; text-align: center; font-size: 16px; color: #111; font-weight: bold; cursor: pointer;" onclick="location.href='publish_scheme.html'">去发布</div>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+                <!-- Standard 4-Tab Bottom Nav -->
+        <nav class="bottom-nav" style="position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; display:flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); border-top:1px solid #eee; z-index:100;">
+            <a href="index.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>首页</span>
+            </a>
+            <a href="customization_2d.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#111; font-weight:bold;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                <span>去改装</span>
+            </a>
+            <a href="mall.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>商城</span>
+            </a>
+            <a href="profile.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>我的</span>
+            </a>
+        </nav>
+</body>
+</html>

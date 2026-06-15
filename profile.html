@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的 - 乐改</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .header-bg {
+            background: linear-gradient(135deg, #2b2b2b, #111111);
+            color: #fff;
+            padding: 40px 20px 60px;
+            border-radius: 0 0 20px 20px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .avatar {
+            width: 64px; height: 64px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
+            background: #fff; margin-right: 16px; object-fit: cover;
+        }
+        .username { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .user-car { font-size: 12px; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 12px; display: inline-block; }
+
+        .dashboard-panel {
+            background: #fff;
+            border-radius: 12px;
+            margin: -30px 20px 20px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 5;
+        }
+        .order-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+        .order-icon {
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; text-decoration: none; color: #111;
+        }
+        .order-icon i { font-size: 24px; font-style: normal; margin-bottom: 8px; }
+        .order-icon span { font-size: 12px; color: var(--color-text-secondary); }
+
+        .menu-list {
+            background: #fff;
+            margin: 0 20px;
+            border-radius: 12px;
+            padding: 8px 0;
+            margin-bottom: 100px;
+        }
+        .menu-item {
+            display: flex; align-items: center; padding: 16px 20px; cursor: pointer; text-decoration: none; color: #111;
+        }
+        .menu-item:not(:last-child) { border-bottom: 1px solid var(--color-divider); }
+        .menu-icon { font-size: 20px; margin-right: 12px; font-style: normal; }
+        .menu-text { flex: 1; font-size: 15px; }
+        .menu-arrow { color: #ccc; font-family: monospace; font-size: 16px; }
+
+    </style>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="app-container" style="background: var(--color-bg-light);">
+
+        <!-- 小程序系统头 -->
+        <div style="position: relative; top: 0; z-index: 9999; background: #fff; padding-bottom: 4px;">
+            <!-- 状态栏 -->
+            <div style="height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px; font-weight: 500; font-family: -apple-system, sans-serif;">
+                <span>09:41</span>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 9.5L1 11M5 6.5L5 11M9 3.5L9 11M13 0.5L13 11" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 1L1 8H15L8 1Z" fill="#111"/></svg>
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="3" stroke="#111" stroke-width="1.5"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#111"/><path d="M21 4V8" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+            <!-- 胶囊导航栏 -->
+            <div style="height: 44px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; left: 16px; font-size: 24px; cursor: pointer; color: #111; line-height: 44px;" onclick="history.back()">‹</div>
+                <div style="font-size: 16px; font-weight: 600;">乐改</div>
+                <div style="position: absolute; right: 12px; width: 80px; height: 32px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-evenly; backdrop-filter: blur(10px);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                    <div style="width: 1px; height: 16px; background: rgba(0,0,0,0.1);"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-bg">
+            <div class="user-info">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" class="avatar" alt="User">
+                <div>
+                    <div class="username">改装爱好者_007</div>
+                    <div class="user-car">座驾: 日产天籁 2.0T</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; margin: 0;">我的订单</h3>
+                <a href="order_list.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none;">全部订单 ></a>
+            </div>
+            <div class="order-nav">
+                <a href="order_list.html" class="order-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;margin-bottom:6px;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>待付款</span>
+                </a>
+                <a href="order_list.html" class="order-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;margin-bottom:6px;"><path d="M4 2v20l2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2V2L18 4l-2-2-2 2-2-2-2 2-2-2-2 2Z"></path><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line></svg>
+                    <span>待核销</span>
+                </a>
+                <a href="order_list.html" class="order-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;margin-bottom:6px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                    <span>服务中</span>
+                </a>
+                <a href="order_list.html" class="order-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;margin-bottom:6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <span>评价</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="menu-list">
+            <a href="my_cars.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;margin-right:12px;"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a2 2 0 0 0-1.6-.8H9.3a2 2 0 0 0-1.6.8L5 11l-5.16.86a1 1 0 0 0-.84.99V16h3m10 0a3 3 0 1 1-6 0m10 0a3 3 0 1 1-6 0"/></svg>
+                <span class="menu-text">我的爱车库</span>
+                <span class="menu-arrow">></span>
+            </a>
+            <a href="my_schemes.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;margin-right:12px;"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span class="menu-text">我的改装</span>
+                <span class="menu-arrow">></span>
+            </a>
+            <a href="favorites.html" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;margin-right:12px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span class="menu-text">商品收藏</span>
+                <span class="menu-arrow">></span>
+            </a>
+            <a href="sa_verify.html" class="menu-item" style="margin-top: 8px; border-top: 8px solid var(--color-bg-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;margin-right:12px;"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><path d="M7 8h10"></path><path d="M7 12h10"></path><path d="M7 16h10"></path></svg>
+                <span class="menu-text">【SA端】门店核销工作台</span>
+                <span class="menu-arrow">></span>
+            </a>
+        </div>
+
+                                <!-- Standard 4-Tab Bottom Nav -->
+        <nav class="bottom-nav" style="position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; display:flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); border-top:1px solid #eee; z-index:100;">
+            <a href="index.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>首页</span>
+            </a>
+            <a href="customization_2d.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                <span>去改装</span>
+            </a>
+            <a href="mall.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#999;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>商城</span>
+            </a>
+            <a href="profile.html" class="nav-item" style="display:flex; flex-direction:column; align-items:center; text-decoration:none; font-size:10px; color:#111; font-weight:bold;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的订单 - 乐改</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .header {
+            padding: 16px 20px; display: flex; align-items: center; background: var(--color-bg);
+        }
+        .header h1 { margin: 0; font-size: 18px; text-align: center; flex: 1; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #111; width: 24px; cursor: pointer; }
+
+        .tabs {
+            display: flex; background: var(--color-bg); border-bottom: 1px solid var(--color-divider);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .tab {
+            flex: 1; text-align: center; padding: 12px 0; font-size: 14px; color: var(--color-text-secondary);
+            position: relative; cursor: pointer;
+        }
+        .tab.active { color: #111; font-weight: bold; }
+        .tab.active::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 3px; background: #111;
+        }
+
+        .order-list { padding: 16px; padding-bottom: 40px; }
+        .order-card {
+            background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #f5f5f5; padding-bottom: 12px; margin-bottom: 12px; font-size: 12px; }
+        .store-name { font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+        .order-status { color: #c92a2a; }
+        .order-status.done { color: var(--color-text-tertiary); }
+
+        .order-body { display: flex; margin-bottom: 12px; }
+        .item-img { width: 60px; height: 60px; border-radius: 4px; margin-right: 12px; background: #eee; object-fit: cover; }
+        .item-info { flex: 1; }
+        .item-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+        .item-sku { font-size: 12px; color: var(--color-text-tertiary); }
+        .item-price-wrap { text-align: right; }
+        .item-price { font-size: 14px; font-weight: bold; }
+        .item-qty { font-size: 12px; color: var(--color-text-secondary); }
+
+        .order-footer { display: flex; justify-content: space-between; align-items: center; }
+        .total-price { font-size: 14px; font-weight: bold; }
+        .actions { display: flex; gap: 8px; }
+        .btn-small { border: 1px solid #ddd; padding: 6px 16px; border-radius: 16px; font-size: 12px; cursor: pointer; color: #111; }
+        .btn-small.primary { border-color: #111; background: #111; color: #fff; }
+
+        /* QR Code Modal for Verification */
+        .qr-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center;
+        }
+        .qr-box {
+            background: #fff; width: 80%; max-width: 320px; border-radius: 12px; padding: 24px;
+            text-align: center;
+        }
+        .qr-code { width: 150px; height: 150px; background: #eee; margin: 20px auto; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="background: var(--color-bg-light);">
+
+        <!-- 小程序系统头 -->
+        <div style="position: relative; top: 0; z-index: 9999; background: #fff; padding-bottom: 4px;">
+            <!-- 状态栏 -->
+            <div style="height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px; font-weight: 500; font-family: -apple-system, sans-serif;">
+                <span>09:41</span>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 9.5L1 11M5 6.5L5 11M9 3.5L9 11M13 0.5L13 11" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 1L1 8H15L8 1Z" fill="#111"/></svg>
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="3" stroke="#111" stroke-width="1.5"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#111"/><path d="M21 4V8" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+            <!-- 胶囊导航栏 -->
+            <div style="height: 44px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; left: 16px; font-size: 24px; cursor: pointer; color: #111; line-height: 44px;" onclick="history.back()">‹</div>
+                <div style="font-size: 16px; font-weight: 600;">乐改</div>
+                <div style="position: absolute; right: 12px; width: 80px; height: 32px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-evenly; backdrop-filter: blur(10px);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                    <div style="width: 1px; height: 16px; background: rgba(0,0,0,0.1);"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <a href="profile.html" class="back-btn">‹</a>
+            <h1>订单列表</h1>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab">全部</div>
+            <div class="tab">待付款</div>
+            <div class="tab active">待核销</div>
+            <div class="tab">待评价</div>
+        </div>
+
+        <div class="order-list">
+            <div class="order-card" onclick="location.href='order_detail.html'" style="cursor: pointer;">
+                <div class="order-header">
+                    <div class="store-name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> 广州白云专营店 </div>
+                    <div class="order-status">待核销</div>
+                </div>
+                <div class="order-body">
+                    <img src="https://images.unsplash.com/photo-1555626906-fcf10d6851b4?auto=format&fit=crop&w=150&q=80" class="item-img" alt="Product">
+                    <div class="item-info">
+                        <div class="item-title">哑光黑改色膜套餐 (含施工)</div>
+                        <div class="item-sku">颜色: 哑光黑 / 材质: 进口</div>
+                    </div>
+                    <div class="item-price-wrap">
+                        <div class="item-price">¥3,500</div>
+                        <div class="item-qty">x1</div>
+                    </div>
+                </div>
+                <div class="order-footer">
+                    <div class="total-price">实付: ¥3,500</div>
+                    <div class="actions">
+                        <div class="btn-small">联系门店</div>
+                        <div class="btn-small primary" onclick="event.stopPropagation(); document.getElementById('qrModal').style.display='flex'">出示核销码</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-card" onclick="location.href='order_detail.html'" style="cursor: pointer;">
+                <div class="order-header">
+                    <div class="store-name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> 广州白云专营店</div>
+                    <div class="order-status done">已完成</div>
+                </div>
+                <div class="order-body">
+                    <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=150&q=80" class="item-img" alt="Product">
+                    <div class="item-info">
+                        <div class="item-title">运动款碳纤维尾翼</div>
+                        <div class="item-sku">已核销 | 已施工</div>
+                    </div>
+                    <div class="item-price-wrap">
+                        <div class="item-price">¥1,200</div>
+                        <div class="item-qty">x1</div>
+                    </div>
+                </div>
+                <div class="order-footer">
+                    <div class="total-price">实付: ¥1,200</div>
+                    <div class="actions">
+                        <div class="btn-small">再来一单</div>
+                        <div class="btn-small primary" onclick="event.stopPropagation();">去评价</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- QR Modal -->
+        <div class="qr-modal" id="qrModal" onclick="this.style.display='none'">
+            <div class="qr-box" onclick="event.stopPropagation()">
+                <h3>到店核销码</h3>
+                <p style="font-size: 12px; color: #666; margin-top: 8px;">请将此码出示给门店SA进行扫码核销</p>
+                <div class="qr-code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 80px; height: 80px; color: #111;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M7 7h.01"></path><path d="M17 7h.01"></path><path d="M7 17h.01"></path><path d="M17 17h.01"></path><path d="M12 7v10"></path><path d="M7 12h10"></path></svg></div>
+                <p style="font-size: 16px; font-weight: bold; letter-spacing: 2px;">8829 3310 4492</p>
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee;">
+                    <div class="btn-small primary" style="text-align: center;" onclick="document.getElementById('qrModal').style.display='none'">关闭</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

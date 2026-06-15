@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商品收藏 - 乐改</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-divider);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .header h1 { margin: 0; font-size: 18px; text-align: center; flex: 1; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #111; width: 24px; cursor: pointer; }
+
+        .tabs {
+            display: flex;
+            background: #fff;
+            border-bottom: 1px solid var(--color-divider);
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 16px 0;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+        .tab.active {
+            color: #111;
+            font-weight: bold;
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: #111;
+            border-radius: 2px;
+        }
+
+        .tab-content { display: none; padding: 16px; }
+        .tab-content.active { display: block; }
+
+        /* Scheme Card */
+        .scheme-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
+        .scheme-img { width: 100%; height: 180px; object-fit: cover; }
+        .scheme-info { padding: 12px; }
+        .scheme-title { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+        .scheme-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--color-text-secondary); }
+
+        /* Product Card */
+        .product-card {
+            display: flex;
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
+        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 12px; }
+        .product-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 14px; font-weight: bold; }
+        .product-price { font-size: 16px; font-weight: bold; color: #c92a2a; }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="background: var(--color-bg-light); padding-bottom: 20px;">
+
+        <!-- 小程序系统头 -->
+        <div style="position: relative; top: 0; z-index: 9999; background: #fff; padding-bottom: 4px;">
+            <!-- 状态栏 -->
+            <div style="height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px; font-weight: 500; font-family: -apple-system, sans-serif;">
+                <span>09:41</span>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 9.5L1 11M5 6.5L5 11M9 3.5L9 11M13 0.5L13 11" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 1L1 8H15L8 1Z" fill="#111"/></svg>
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="3" stroke="#111" stroke-width="1.5"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#111"/><path d="M21 4V8" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+            <!-- 胶囊导航栏 -->
+            <div style="height: 44px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; left: 16px; font-size: 24px; cursor: pointer; color: #111; line-height: 44px;" onclick="history.back()">‹</div>
+                <div style="font-size: 16px; font-weight: 600;">乐改</div>
+                <div style="position: absolute; right: 12px; width: 80px; height: 32px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-evenly; backdrop-filter: blur(10px);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                    <div style="width: 1px; height: 16px; background: rgba(0,0,0,0.1);"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            
+            <h1>商品收藏</h1>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'scheme-list')">方案收藏</div>
+            <div class="tab" onclick="switchTab(this, 'product-list')">商品收藏</div>
+        </div>
+
+        <!-- 方案收藏列表 -->
+        <div id="scheme-list" class="tab-content active">
+            <div class="scheme-card" onclick="location.href='scheme_detail.html'">
+                <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=800&q=80" class="scheme-img">
+                <div class="scheme-info">
+                    <div class="scheme-title">黑武士风格，全车哑光黑改色膜+熏黑轮毂</div>
+                    <div class="scheme-meta">
+                        <span>共 2 件商品</span>
+                        <span style="color: #c92a2a; font-weight: bold; font-size: 14px;">¥4,300</span>
+                    </div>
+                </div>
+            </div>
+            <div class="scheme-card" onclick="location.href='scheme_detail.html'">
+                <img src="https://images.unsplash.com/photo-1555626906-fcf10d6851b4?auto=format&fit=crop&w=800&q=80" class="scheme-img">
+                <div class="scheme-info">
+                    <div class="scheme-title">竞速红运动套件，战斗气息拉满</div>
+                    <div class="scheme-meta">
+                        <span>共 3 件商品</span>
+                        <span style="color: #c92a2a; font-weight: bold; font-size: 14px;">¥6,200</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品收藏列表 -->
+        <div id="product-list" class="tab-content">
+            <div class="product-card" onclick="location.href='product_detail.html'">
+                <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&w=400&q=80" class="product-img">
+                <div class="product-info">
+                    <div class="product-title">TPU材质 隐形车衣 高透提亮</div>
+                    <div class="product-price">¥8,999</div>
+                </div>
+            </div>
+            <div class="product-card" onclick="location.href='product_detail.html'">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=400&q=80" class="product-img">
+                <div class="product-info">
+                    <div class="product-title">运动款锻造轮毂 极轻量化设计</div>
+                    <div class="product-price">¥1,200</div>
+                </div>
+            </div>
+            <div class="product-card" onclick="location.href='product_detail.html'">
+                <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=400&q=80" class="product-img">
+                <div class="product-info">
+                    <div class="product-title">高性能刹车卡钳 原装位直上</div>
+                    <div class="product-price">¥4,500</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(el, targetId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

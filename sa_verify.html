@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SA门店核销 - 乐改</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        body { background: #fafafa; }
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid var(--color-divider);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .header h1 { margin: 0; font-size: 16px; text-align: center; flex: 1; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #111; width: 24px; cursor: pointer; }
+        
+        .scan-area {
+            background: #fff;
+            margin: 20px;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 2px dashed #e5e5e5;
+            cursor: pointer;
+        }
+        .scan-icon {
+            width: 64px; height: 64px; background: #f4f4f5; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px; color: #111;
+        }
+        
+        .manual-input-area {
+            background: #fff;
+            margin: 0 20px 20px;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .input-group {
+            display: flex;
+            background: #f4f4f5;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .input-group input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 16px;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        
+        .history-list {
+            margin: 0 20px;
+        }
+        .history-item {
+            background: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+    </style>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- 小程序系统头 -->
+        <div style="position: relative; top: 0; z-index: 9999; background: #fff; padding-bottom: 4px;">
+            <!-- 状态栏 -->
+            <div style="height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px; font-weight: 500; font-family: -apple-system, sans-serif;">
+                <span>09:41</span>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 9.5L1 11M5 6.5L5 11M9 3.5L9 11M13 0.5L13 11" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 1L1 8H15L8 1Z" fill="#111"/></svg>
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="1" y="1" width="18" height="10" rx="3" stroke="#111" stroke-width="1.5"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#111"/><path d="M21 4V8" stroke="#111" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+            <!-- 胶囊导航栏 -->
+            <div style="height: 44px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; left: 16px; font-size: 24px; cursor: pointer; color: #111; line-height: 44px;" onclick="history.back()">‹</div>
+                <div style="font-size: 16px; font-weight: 600;">乐改</div>
+                <div style="position: absolute; right: 12px; width: 80px; height: 32px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-evenly; backdrop-filter: blur(10px);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                    <div style="width: 1px; height: 16px; background: rgba(0,0,0,0.1);"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            
+            <h1 id="header-title">【SA端】门店核销工作台</h1>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <!-- 扫码核销区域 -->
+        <div class="scan-area" onclick="showToast('调起微信/浏览器扫一扫功能')">
+            <div class="scan-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px;">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                    <line x1="7" y1="12" x2="17" y2="12"></line>
+                </svg>
+            </div>
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">扫码核销</div>
+            <div style="font-size: 13px; color: #999;">请扫描客户订单详情页的核销二维码</div>
+        </div>
+
+        <div style="text-align: center; color: #ccc; font-size: 12px; margin-bottom: 20px;">—— 或者 ——</div>
+
+        <!-- 手动输入区域 -->
+        <div class="manual-input-area">
+            <div style="font-size: 15px; font-weight: bold; margin-bottom: 16px;">手动输入核销码</div>
+            <div class="input-group">
+                <input type="text" placeholder="输入12位提货/核销码" maxlength="12">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="showToast('查询订单并核销成功！')">验证并核销</button>
+        </div>
+
+        <!-- 最近核销记录 (仅作原型展示) -->
+        <div style="padding: 20px;">
+            <div style="font-size: 15px; font-weight: bold; margin-bottom: 12px;">今日核销记录</div>
+            <div class="history-item">
+                <div>
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">天籁 隐形车衣施工</div>
+                    <div style="font-size: 12px; color: #999;">车牌: 粤A·88888 | 客户: 张先生</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 12px; color: #2b8a3e; font-weight: bold; background: #ebfbee; padding: 4px 8px; border-radius: 4px; display: inline-block;">已核销</div>
+                    <div style="font-size: 10px; color: #ccc; margin-top: 4px;">10:30</div>
+                </div>
+            </div>
+            <div class="history-item">
+                <div>
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">轩逸 锻造轮毂安装</div>
+                    <div style="font-size: 12px; color: #999;">车牌: 粤B·66666 | 客户: 李女士</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 12px; color: #2b8a3e; font-weight: bold; background: #ebfbee; padding: 4px 8px; border-radius: 4px; display: inline-block;">已核销</div>
+                    <div style="font-size: 10px; color: #ccc; margin-top: 4px;">09:15</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
