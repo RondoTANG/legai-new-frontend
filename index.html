@@ -94,128 +94,113 @@
             <div style="background: #111; color: #fff; padding: 6px 16px; border-radius: 16px; font-size: 13px; font-weight: bold; cursor: pointer;" onclick="location.href='customization_2d.html'">去定制</div>
         </div>
 
-        <!-- Official Recommended (2-col grid) -->
-        <div style="padding: 0 16px 20px;">
-            <div style="font-size: 16px; font-weight: bold; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;">
-                官方精选方案
-                <span style="font-size:12px; color:#999; font-weight:normal;">更多 ›</span>
+        <!-- Categories Tabs -->
+        <div style="display: flex; align-items: center; background: #fff; padding: 0 16px; border-bottom: 1px solid #eee; position: sticky; top: 69px; z-index: 9;">
+            <div style="display: flex; overflow-x: auto; gap: 24px; padding: 12px 0; scrollbar-width: none; flex: 1; align-items: center; -webkit-overflow-scrolling: touch;">
+                <div style="font-size: 15px; font-weight: bold; color: #111; white-space: nowrap; position: relative; cursor: pointer;">
+                    推荐
+                    <div style="position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 16px; height: 3px; background: #111; border-radius: 2px;"></div>
+                </div>
+                <div style="font-size: 14px; color: #666; white-space: nowrap; cursor: pointer;">天籁</div>
+                <div style="font-size: 14px; color: #666; white-space: nowrap; cursor: pointer;">轩逸</div>
+                <div style="font-size: 14px; color: #666; white-space: nowrap; cursor: pointer;">外观改装</div>
+                <div style="font-size: 14px; color: #666; white-space: nowrap; cursor: pointer;">内饰升级</div>
+                <div style="font-size: 14px; color: #666; white-space: nowrap; cursor: pointer;">全部方案</div>
             </div>
-            <div class="grid-2col">
-                <div class="card" onclick="location.href='scheme_detail.html'">
-                    <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=400&q=80" style="height:120px;">
-                    <div class="card-info">
-                        <div class="card-title">天籁·黑武士暗夜行者全车轻改方案</div>
-                        <div class="card-meta">
-                            <div style="color:#c92a2a; font-weight:bold; font-size:13px;">¥4,280</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 890</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card" onclick="location.href='scheme_detail.html'">
-                    <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=400&q=80" style="height:120px;">
-                    <div class="card-info">
-                        <div class="card-title">轩逸·运动姿态基础套件升级</div>
-                        <div class="card-meta">
-                            <div style="color:#c92a2a; font-weight:bold; font-size:13px;">¥2,999</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 652</div>
-                        </div>
-                    </div>
-                </div>
+            <div style="padding-left: 12px; background: #fff; box-shadow: -8px 0 8px -4px rgba(255,255,255,0.9); z-index: 2; height: 100%; display: flex; align-items: center; cursor: pointer;" onclick="showToast('展开全部栏目')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
         </div>
 
-        <!-- Popular DIY (Masonry via 2-col grid for stability) -->
-        <div style="padding: 0 16px 20px;">
-            <div style="font-size: 16px; font-weight: bold; margin-bottom: 12px;">热门DIY改装方案</div>
+        <!-- Schemes Grid -->
+        <div style="padding: 16px;">
             <div class="grid-2col">
+                <!-- Card 1 (Official) -->
                 <div class="card" onclick="location.href='scheme_detail.html'">
-                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80" style="height:180px;">
-                    <div class="card-info">
-                        <div class="card-title">黑武士风格，全车哑光黑改色膜+熏黑轮毂</div>
-                        <div class="card-meta">
-                            <div>车友A</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 128</div>
+                    <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=400&q=80" style="height:160px; object-fit: cover;">
+                    <div class="card-info" style="padding: 12px;">
+                        <div class="card-title" style="margin-bottom: 8px;">
+                            <span style="background: #111; color: #fff; font-size: 10px; padding: 2px 4px; border-radius: 2px; margin-right: 4px; vertical-align: text-bottom;">官方</span>
+                            天籁·黑武士暗夜行者全车轻改方案
+                        </div>
+                        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #999;">
+                            <div style="display: flex; align-items: center; gap: 4px; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=32&h=32&q=80" style="width: 16px; height: 16px; border-radius: 8px;">
+                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px;">日产小助手</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 2px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                890
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 (User) -->
+                <div class="card" onclick="location.href='scheme_detail.html'">
+                    <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=400&q=80" style="height:120px; object-fit: cover;">
+                    <div class="card-info" style="padding: 12px;">
+                        <div class="card-title" style="margin-bottom: 8px;">
+                            轩逸·运动姿态基础套件升级
+                        </div>
+                        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #999;">
+                            <div style="display: flex; align-items: center; gap: 4px; overflow: hidden;">
+                                <div style="width: 16px; height: 16px; border-radius: 8px; background: #ddd;"></div>
+                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px;">车友A</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 2px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                128
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card" onclick="location.href='scheme_detail.html'">
+                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80" style="height:180px; object-fit: cover;">
+                    <div class="card-info" style="padding: 12px;">
+                        <div class="card-title" style="margin-bottom: 8px;">
+                            黑武士风格，全车哑光黑改色膜+熏黑轮毂
+                        </div>
+                        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #999;">
+                            <div style="display: flex; align-items: center; gap: 4px; overflow: hidden;">
+                                <div style="width: 16px; height: 16px; border-radius: 8px; background: #ccc;"></div>
+                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px;">张三丰</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 2px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                345
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&w=400&h=300&q=80" style="height:140px;">
-                    <div class="card-info">
-                        <div class="card-title">刚贴完隐形车衣，来交个作业</div>
-                        <div class="card-meta">
-                            <div>新手小白</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 45</div>
+                <!-- Card 4 -->
+                <div class="card" onclick="location.href='scheme_detail.html'">
+                    <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&w=400&q=80" style="height:140px; object-fit: cover;">
+                    <div class="card-info" style="padding: 12px;">
+                        <div class="card-title" style="margin-bottom: 8px;">
+                            刚贴完隐形车衣，来交个作业
                         </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=400&q=80" style="height:160px;">
-                    <div class="card-info">
-                        <div class="card-title">轻度改装，换了个碳纤维牛角后视镜壳</div>
-                        <div class="card-meta">
-                            <div>老炮</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 211</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=400&h=500&q=80" style="height:190px;">
-                    <div class="card-info">
-                        <div class="card-title">碳纤维尾翼加持，运动感拉满</div>
-                        <div class="card-meta">
-                            <div>速度迷</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 89</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=400&q=80" style="height:150px;">
-                    <div class="card-info">
-                        <div class="card-title">新到的绞牙避震，直接贴地飞行</div>
-                        <div class="card-meta">
-                            <div>姿态玩家</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 342</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=400&q=80" style="height:170px;">
-                    <div class="card-info">
-                        <div class="card-title">分享一套很棒的锻造轮毂数据</div>
-                        <div class="card-meta">
-                            <div>JDM粉丝</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 156</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=400&q=80" style="height:140px;">
-                    <div class="card-info">
-                        <div class="card-title">终于把这套前唇安排上了，帅！</div>
-                        <div class="card-meta">
-                            <div>阿辉啊</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 92</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?auto=format&fit=crop&w=400&q=80" style="height:160px;">
-                    <div class="card-info">
-                        <div class="card-title">夜间实拍，这氛围灯真绝了</div>
-                        <div class="card-meta">
-                            <div>夜晚的星</div>
-                            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 275</div>
+                        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #999;">
+                            <div style="display: flex; align-items: center; gap: 4px; overflow: hidden;">
+                                <div style="width: 16px; height: 16px; border-radius: 8px; background: #eee;"></div>
+                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px;">新手小白</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 2px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                45
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px; padding-bottom: 20px;">
+                加载更多...
+            </div>
+        </div>
 
         <!-- Standard 4-Tab Bottom Nav -->
         <nav class="bottom-nav" style="position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; display:flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); border-top:1px solid #eee; z-index:100;">
