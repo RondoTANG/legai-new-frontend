@@ -179,13 +179,80 @@
         <div style="height: 300px; background: #fff; margin: 0 20px 100px;"></div>
 
         <div class="action-bar">
-            <div class="action-icon">
-                <i>⭐</i>
+            <div class="action-icon" onclick="toggleFavorite(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" style="width: 20px; height: 20px; margin-bottom: 2px; transition: all 0.3s;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 <span>收藏</span>
             </div>
-            <div class="buy-btn" style="background:#fff; color:#111; border:1px solid #111;" onclick="addToScheme('隐形车衣套餐', '8999')">加入改装方案</div>
-            <div class="buy-btn" onclick="location.href='checkout.html'">直接领券购买</div>
+            <div class="buy-btn" style="background:#fff; color:#111; border:1px solid #111;" onclick="showSchemePicker()">加入改装方案</div>
+            <div class="buy-btn" onclick="location.href='checkout.html'">直接购买</div>
         </div>
+
+        <!-- 加入方案 Bottom Sheet -->
+        <div id="scheme-picker-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000;">
+            <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #fff; border-radius: 16px 16px 0 0; padding: 20px; box-sizing: border-box; transition: transform 0.3s ease-out;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="font-size: 16px; font-weight: bold;">选择要加入的方案</div>
+                    <div style="font-size: 20px; color: #999; cursor: pointer; padding: 0 8px;" onclick="hideSchemePicker()">×</div>
+                </div>
+                
+                <!-- Scheme List -->
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <div class="scheme-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #eee; cursor: pointer;" onclick="confirmAddScheme('天籁·黑武士暗夜行者')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?auto=format&fit=crop&w=100&q=80" style="width: 48px; height: 48px; border-radius: 4px; object-fit: cover;">
+                            <div>
+                                <div style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">天籁·黑武士暗夜行者</div>
+                                <div style="font-size: 12px; color: #999;">共 4 件商品</div>
+                            </div>
+                        </div>
+                        <div style="width: 18px; height: 18px; border-radius: 9px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center;"></div>
+                    </div>
+                    
+                    <div class="scheme-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #eee; cursor: pointer;" onclick="confirmAddScheme('天籁·基础保养套件')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 48px; height: 48px; border-radius: 4px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px;">无封面</div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">天籁·基础保养套件</div>
+                                <div style="font-size: 12px; color: #999;">共 1 件商品</div>
+                            </div>
+                        </div>
+                        <div style="width: 18px; height: 18px; border-radius: 9px; border: 1px solid #ccc;"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 20px 0 10px; color: #111; font-weight: 500; cursor: pointer;" onclick="location.href='customization_2d.html'">
+                    <span style="font-size: 20px;">+</span> 新建方案
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleFavorite(el) {
+                const svg = el.querySelector('svg');
+                if (svg.getAttribute('fill') === 'none') {
+                    svg.setAttribute('fill', '#fadb14');
+                    svg.setAttribute('stroke', '#fadb14');
+                    showToast('已加入商品收藏');
+                } else {
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', '#111');
+                    showToast('已取消收藏');
+                }
+            }
+
+            function showSchemePicker() {
+                document.getElementById('scheme-picker-overlay').style.display = 'block';
+            }
+
+            function hideSchemePicker() {
+                document.getElementById('scheme-picker-overlay').style.display = 'none';
+            }
+
+            function confirmAddScheme(schemeName) {
+                hideSchemePicker();
+                showToast('已成功加入「' + schemeName + '」');
+            }
+        </script>
     </div>
 </body>
 </html>
