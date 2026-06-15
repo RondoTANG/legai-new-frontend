@@ -121,35 +121,35 @@
 
         <div class="brand-list">
             <div class="alpha-header">热</div>
-            <div class="brand-item" onclick="saveCar('东风日产', '天籁 2022款')">
+            <div class="brand-item" onclick="openDrawer('东风日产')">
                 <div class="brand-logo">N</div>
                 <div class="brand-name">东风日产 (点我选车测试)</div>
             </div>
-            <div class="brand-item" onclick="saveCar('宝马', '3系')">
+            <div class="brand-item" onclick="openDrawer('宝马')">
                 <div class="brand-logo">B</div>
                 <div class="brand-name">宝马</div>
             </div>
             
             <div class="alpha-header">A</div>
-            <div class="brand-item">
+            <div class="brand-item" onclick="openDrawer('奥迪')">
                 <div class="brand-logo">A</div>
                 <div class="brand-name">奥迪</div>
             </div>
-            <div class="brand-item">
+            <div class="brand-item" onclick="openDrawer('阿斯顿·马丁')">
                 <div class="brand-logo">A</div>
                 <div class="brand-name">阿斯顿·马丁</div>
             </div>
 
             <div class="alpha-header">B</div>
-            <div class="brand-item">
+            <div class="brand-item" onclick="openDrawer('保时捷')">
                 <div class="brand-logo">B</div>
                 <div class="brand-name">保时捷</div>
             </div>
-            <div class="brand-item">
+            <div class="brand-item" onclick="openDrawer('比亚迪')">
                 <div class="brand-logo">B</div>
                 <div class="brand-name">比亚迪</div>
             </div>
-            <div class="brand-item">
+            <div class="brand-item" onclick="openDrawer('本田')">
                 <div class="brand-logo">B</div>
                 <div class="brand-name">本田</div>
             </div>
@@ -160,6 +160,56 @@
             <span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span>
             <span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
         </div>
+
+        <!-- Drawer Overlay -->
+        <div id="drawer-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999;" onclick="closeDrawer()"></div>
+        
+        <!-- Drawer Content -->
+        <div id="model-drawer" style="position: fixed; top: 0; right: -100%; width: 85%; max-width: 400px; height: 100%; background: #fff; z-index: 10000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -4px 0 16px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+            <div style="padding: 16px 20px; font-weight: bold; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; padding-top: calc(16px + env(safe-area-inset-top));">
+                <span id="drawer-brand-title">选择车系与车型</span>
+                <span onclick="closeDrawer()" style="font-size: 24px; color: #999; cursor: pointer; padding: 0 8px;">×</span>
+            </div>
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="series-group">
+                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">天籁 ALTIMA</div>
+                    <div style="padding: 0 20px;">
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0L XL-TLS悦享版')">2022款 2.0L XL-TLS 悦享版</div>
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2022款 2.0T XV 尊享版')">2022款 2.0T XV 尊享版</div>
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '天籁 2021款 2.0L XE 纯真版')">2021款 2.0L XE 纯真版</div>
+                    </div>
+                </div>
+                <div class="series-group">
+                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">轩逸 SYLPHY</div>
+                    <div style="padding: 0 20px;">
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2023款 1.6L 悦享版')">2023款 1.6L 悦享版</div>
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '轩逸 2022款 e-POWER 超智联PLUS')">2022款 e-POWER 超智联PLUS</div>
+                    </div>
+                </div>
+                <div class="series-group">
+                    <div style="padding: 12px 20px; background: #f9f9f9; font-size: 14px; font-weight: bold; color: #333;">逍客 QASHQAI</div>
+                    <div style="padding: 0 20px;">
+                        <div style="padding: 16px 0; border-bottom: 1px solid #eee; font-size: 14px; cursor: pointer;" onclick="saveCar('东风日产', '逍客 2023款 2.0L 豪华版')">2023款 2.0L 豪华版</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openDrawer(brandName) {
+                document.getElementById('drawer-brand-title').innerText = brandName;
+                document.getElementById('drawer-overlay').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('model-drawer').style.right = '0';
+                }, 10);
+            }
+            function closeDrawer() {
+                document.getElementById('model-drawer').style.right = '-100%';
+                setTimeout(() => {
+                    document.getElementById('drawer-overlay').style.display = 'none';
+                }, 300);
+            }
+        </script>
     </div>
 </body>
 </html>
